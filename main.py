@@ -48,7 +48,7 @@ class TextRequest(BaseModel):
     text: str
 
 # ============================================================
-#   2. PROCESSOR (ВАШ НОВЫЙ КОД)
+#   2. PROCESSOR 
 # ============================================================
 
 class TextProcessor:
@@ -337,18 +337,15 @@ class TextProcessor:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # --- Startup ---
     with open("law_aliases.json", "r", encoding="utf-8") as file:
         codex_aliases = json.load(file)
 
-    # создаем процессор один раз при старте
     app.state.processor = TextProcessor(codex_aliases)
-    print("🚀 Сервис запущен и готов к обработке текста...")
+    print("Сервис запущен и готов к обработке текста...")
     yield
-    # --- Shutdown ---
     del codex_aliases
     del app.state.processor
-    print("🛑 Сервис завершает работу...")
+    print("Сервис завершает работу...")
 
 
 def get_processor(request: Request) -> TextProcessor:
